@@ -4,7 +4,7 @@ type User {
     username: String
     email: String
     password: String
-    savedBooks: [bookSchema]!
+    savedBooks: [Book]!
   }
 
   type Book {
@@ -22,8 +22,8 @@ type User {
   }
 
   type Query{
-   # users: [User]
-   # user(username: String!): User
+   users: [User]
+   user(username: String!): User
     me: User
   }
 
@@ -38,4 +38,3 @@ type User {
 `;
 
 module.exports = typeDefs;
-//TODO: WE ARE HERE 
