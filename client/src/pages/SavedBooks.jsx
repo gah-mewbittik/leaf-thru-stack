@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+//import { useState, useEffect } from 'react';
+
+/* eslint-disable react/prop-types */
 import {
   Container,
   Card,
@@ -7,7 +9,7 @@ import {
   Col
 } from 'react-bootstrap';
 
-import { getMe, deleteBook } from '../utils/API';
+//import { getMe, deleteBook } from '../utils/API';
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
 

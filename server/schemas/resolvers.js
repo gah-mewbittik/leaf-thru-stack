@@ -34,20 +34,20 @@ const resolvers = {
       const user = await User.findOne({ email });
 
       if (!user) {
-        throw AuthenticationError;
+        throw new AuthenticationError('User not found');
       }
 
       const correctPw = await user.isCorrectPassword(password);
 
       if (!correctPw) {
-        throw AuthenticationError;
+        throw new AuthenticationError('Incorrect Password');
       }
 
       const token = signToken(user);
 
       return { token, user };
     },
-    addBook: async (parent, { bookInfo }, context) => {
+    saveBook: async (parent, { bookInfo }, context) => {
       if (context.user) {
         const book = await Book.create({
           ...bookInfo,
@@ -61,26 +61,9 @@ const resolvers = {
 
         return book;
       }
-      throw AuthenticationError;
-      ('You need to be logged in!');
+      throw new AuthenticationError('You need to be logged in!');
     },
-    // addComment: async (parent, { thoughtId, commentText }, context) => { //TODO: REMOVE
-    //   if (context.user) {
-    //     return Thought.findOneAndUpdate(
-    //       { _id: thoughtId },
-    //       {
-    //         $addToSet: {
-    //           comments: { commentText, commentAuthor: context.user.username },
-    //         },
-    //       },
-    //       {
-    //         new: true,
-    //         runValidators: true,
-    //       }
-    //     );
-    //   }
-    //   throw AuthenticationError;
-    // },
+  
     removeBook: async (parent, { bookId }, context) => {
       if (context.user) {
         const book = await Book.findOneAndDelete({
@@ -102,23 +85,7 @@ const resolvers = {
       }
       throw AuthenticationError;
     },
-    // removeComment: async (parent, { thoughtId, commentId }, context) => { TODO: REMOVE
-    //   if (context.user) {
-    //     return Thought.findOneAndUpdate(
-    //       { _id: thoughtId },
-    //       {
-    //         $pull: {
-    //           comments: {
-    //             _id: commentId,
-    //             commentAuthor: context.user.username,
-    //           },
-    //         },
-    //       },
-    //       { new: true }
-    //     );
-    //   }
-    //   throw AuthenticationError;
-    // },
+  
   },
 };
 
