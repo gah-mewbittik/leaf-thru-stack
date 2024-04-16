@@ -9,10 +9,10 @@ import {
 } from 'react-bootstrap';
 
 import Auth from '../utils/auth';
-import { saveBook, searchGoogleBooks } from '../utils/API';
+import {  searchGoogleBooks } from '../utils/API';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
 
-import { useMutation, gql} from '@apollo/client';
+import { useMutation} from '@apollo/client';
 import { SAVE_BOOK } from '../utils/mutations';
 
 const SearchBooks = () => {
@@ -69,6 +69,8 @@ const SearchBooks = () => {
     // find the book in `searchedBooks` state by the matching id
     const bookToSave = searchedBooks.find((book) => book.bookId === bookId);
 
+
+    console.log('Book to save: ',bookToSave);
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
@@ -77,12 +79,15 @@ const SearchBooks = () => {
     }
 
     try {
-      const response = await saveBook(bookToSave, token);
+      console.log('book to save: ', bookToSave);
+      //const { data } = await saveBook( {variables: {...bookToSave}});
+      //const  { data } = await saveBook({ variables: { bookData: { ...bookToSave}} })
+      const { data } = await saveBook({ variables: { input: { ...bookToSave } } });
 
-      if (!response.ok) {
-        throw new Error('something went wrong!');
-      }
-
+      // if (!response.ok) {
+      //   throw new Error('something went wrong!');
+      // }
+      console.log('Save book mutation response: ', data);
       // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
     } catch (err) {

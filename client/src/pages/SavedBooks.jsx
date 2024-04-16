@@ -1,4 +1,4 @@
-//import { useState, useEffect } from 'react';
+import { useState, useEffect} from 'react';
 
 /* eslint-disable react/prop-types */
 import {
@@ -20,13 +20,18 @@ import {REMOVE_BOOK} from '../utils/mutations';
 const SavedBooks = () => {
   
 
-const {loading, error, data} = useQuery(GET_ME)
+const {loading, error, data, refetch} = useQuery(GET_ME)
 
   const [deleteBook] = useMutation(REMOVE_BOOK);
 
+  const [savedBooks, setSavedBooks] = useState([]);
 
   //create function that accepts the book's mongo _id value as param and deletes the book from the database
- 
+  const updateSavedBooks = (bookId) => {
+    setSavedBooks(savedBooks.filter(book => book.bookId !== bookId));
+  };
+
+
   const handleDeleteBook = async (bookId) => {
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
@@ -42,12 +47,17 @@ const {loading, error, data} = useQuery(GET_ME)
       if(updatedData && updatedData.removeBook){
         // upon success, remove book's id from localStorage
         removeBookId(bookId);
+
+        updateSavedBooks(bookId);
       }
 
     } catch (err) {
       console.error(err);
     }
   };
+  useEffect(() => {
+    refetch(); // This will refetch the user data including saved books after mutation
+  }, [savedBooks, refetch]);
 
   // if data isn't here yet, say so
   if (loading) {
@@ -62,21 +72,21 @@ const {loading, error, data} = useQuery(GET_ME)
 
   return (
     <>
-      <div fluid className="text-light bg-dark p-5">
+      <Container fluid className="text-light bg-dark p-5">
         <Container>
           <h1>Viewing saved books!</h1>
         </Container>
-      </div>
+      </Container>
       <Container>
         <h2 className='pt-5'>
           {userData.savedBooks.length
             ? `Viewing ${userData.savedBooks.length} saved ${userData.savedBooks.length === 1 ? 'book' : 'books'}:`
             : 'You have no saved books!'}
         </h2>
-        <Row>
+        <Row>  
           {userData.savedBooks.map((book) => {
             return (
-              <Col md="4">
+              <Col md="4" key={book.id}>
                 <Card key={book.bookId} border='dark'>
                   {book.image ? <Card.Img src={book.image} alt={`The cover for ${book.title}`} variant='top' /> : null}
                   <Card.Body>

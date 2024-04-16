@@ -34,13 +34,13 @@ const SignupForm = () => {
 
     try {
       const {data} = await addUser({
-        variables: userFormData,
+        variables: {...userFormData},
       });
 
       // if (!response.ok) {
       //   throw new Error('something went wrong!');
       // }
-
+      console.log(data);
       const { token, user } = data.addUser;
       console.log(user);
       Auth.login(token);
