@@ -25,7 +25,7 @@ N/A
 
 ## Usage
 
-To view the application in action, simply click the following link: ADD LINK
+To view the application in action, simply click the following link: https://leaf-thru-stack.onrender.com
 The link will redirect you to RENDER where the user can see the application in action. The Leaf Thru Stack application functionality allows the user to search, save, and delete books. 
 
 ## Credits
